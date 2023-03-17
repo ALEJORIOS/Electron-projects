@@ -3,8 +3,8 @@
 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 587.2 587.5" style="enable-background:new 0 0 587.2 587.5;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FFFFFF;stroke:#FFFFFF;stroke-width:45;stroke-miterlimit:10;}
+	.st0{fill:none;stroke:#FFFFFF;stroke-width:65;stroke-miterlimit:10;}
 </style>
-<rect x="-15.7" y="282.1" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -121.6971 293.6472)" class="st0" width="618.7" height="23.2"/>
-<rect x="282" y="-15.6" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -121.6971 293.6472)" class="st0" width="23.2" height="618.7"/>
+<path class="st0" d="M491.6,373.2h-396c-26.5,0-48-21.5-48-48v-63c0-26.5,21.5-48,48-48h396c26.5,0,48,21.5,48,48v63
+	C539.6,351.7,518.1,373.2,491.6,373.2z"/>
 </svg>

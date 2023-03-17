@@ -4,9 +4,17 @@
     <meta charset="UTF-8" />
     <title>Hello World!</title>
     <link rel="stylesheet" href="index.css" />
-    <script src="main.js"></script>    
   </head>
   <body>
-    <iframe src="./views/title-bar.html" frameborder="0"></iframe>
+    <div class="title-bar">
+      <div class="title"><span>&#9679;Untitled</span></div>
+      <div class="actions">
+        <button id="dismiss-btn" class="action-button"><img src="./assets/windows-actions/dismiss.svg"></button>
+        <button id="minimize-btn" class="action-button"><img src="./assets/windows-actions/minimize.svg"></button>
+        <button id="maximize-btn" class="action-button"><img src="./assets/windows-actions/maximize.svg"></button>
+        <button id="close-btn" class="action-button"><img src="./assets/windows-actions/close.svg"></button>
+      </div>
+    </div>
+    <script src="./renderer.js"></script>
   </body>
 </html>

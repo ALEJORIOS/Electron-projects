@@ -12,20 +12,31 @@ const createWindow = () => {
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    minWidth: 300,
-    minHeight: 200,
     frame: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true
     },
   });
 
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
-  ipcMain.on('closeApp', () => {
-    console.log('Cerrando ventana');
+  const windowActions = {
+    minimize: () => mainWindow.minimize(),
+    maximize: () => {
+      if(mainWindow.isMaximized()) {
+        mainWindow.restore();
+        mainWindow.webContents.send('window-status', "normal");
+      }else{
+        mainWindow.maximize();
+        mainWindow.webContents.send('window-status', "max");
+      }
+    },
+    close: () => mainWindow.close()
+  }
+
+  ipc.on('window-action', (event, action) => {
+    windowActions[action]();
   })
 };
 
