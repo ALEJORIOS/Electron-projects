@@ -3,14 +3,11 @@ import { useDraggable } from '@vueuse/core'
 import { ref, watchEffect, type Ref } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faLayerGroup } from '@fortawesome/free-solid-svg-icons'
-import { faGear } from '@fortawesome/free-solid-svg-icons'
+import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { uid } from 'uid';
 library.add(faLayerGroup);
 library.add(faGear);
-
-const addGroup = () => {
-        groups.value.push({name: "Untitled"})
-    }
 </script>
 
 <!-- Adjustable side bar -->
@@ -24,10 +21,18 @@ const addGroup = () => {
         onEnd: () => {
             document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '0');
         }});
-        watchEffect(() => {
-            const widthValue = x.value;
-            document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${widthValue+3}px`);
-        });
+    watchEffect(() => {
+        const widthValue = x.value;
+        document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${widthValue+3}px`);
+    });
+    let selectedGroups: Ref<Array<string>>;
+    const addGroup = () => {
+        groups.value.push({name: "Untitled", id: uid()})
+    }
+    const addCurrentGroup = (id: string) => {
+        selectedGroups.value.push(id);
+        console.log('>>> ', selectedGroups.value);
+    }
 </script>
 
 <template>
@@ -35,7 +40,7 @@ const addGroup = () => {
         <div class="deviceBox">Devices</div>
         <button @click="addGroup" class="addGroup sidebar-button">Add a group of devices</button>
         <div class="groups">
-            <button v-for="group in groups" class="group">
+            <button v-for="group in groups" :class="{ group: true, selected: selectedGroups.includes(group.id) }" @click="addCurrentGroup(group.id)">
                 <font-awesome-icon icon="fa-solid fa-layer-group"/>&nbsp;{{ group.name }}
             </button>
         </div>
@@ -47,6 +52,7 @@ const addGroup = () => {
 
 <style lang="scss">
     .sidebar {
+        font-family: 'Open Sans', sans-serif;
         --border-opacity: 0;
         display: grid;
         grid-template-rows: repeat(2, auto) 1fr repeat(2, auto);
@@ -64,6 +70,7 @@ const addGroup = () => {
             height: 5rem;
             background-color: #383b41;
             color: #D0D0D0;
+            font-family: 'Golos Text', sans-serif;
             font-size: 2rem;
             font-weight: 700;
             padding: 1rem;
@@ -75,15 +82,14 @@ const addGroup = () => {
             color: #D0D0D0;
             text-align: left;
             height: 50px;
-            font-weight: 500;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
             font-size: 1.2rem;
             padding-left: 0.4rem;
             cursor: pointer;
             &:hover {
                 background-color: #383b41AA;
             }
-        }
-        .addGroup {
         }
         .groups {
             height: 100%;
@@ -96,14 +102,19 @@ const addGroup = () => {
                 color: #d0d0d0;
                 padding: 0.8rem 0;
                 background-color: transparent;
+                font-family: 'Open Sans', sans-serif;
+                font-weight: 300;
                 font-size: 1.1rem;
                 text-align: left;
                 padding-left: 0.8rem;
-                border-left: 2px solid green;
+                border-left: 4px solid green;
                 cursor: pointer;
                 &:hover {
                     background-color: #383b41AA;
                 }
+            }
+            .selected {
+                background-color: red;
             }
         }
         .border{
