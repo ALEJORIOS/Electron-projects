@@ -3,16 +3,24 @@ import { useDraggable } from '@vueuse/core'
 import { ref, watchEffect, type Ref } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faLayerGroup } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { uid } from 'uid';
+import { Command } from '@/scripts/commands';
+import { map } from 'rxjs';
+
 library.add(faLayerGroup);
 library.add(faGear);
-</script>
+library.add(faCirclePlus);
 
-<!-- Adjustable side bar -->
-<script lang="ts">
-    const sbBorder = ref(null);
+let ControlPress: Boolean = false;
+
+Command.pipe(map(keys => keys.Control === "down" || keys.ControlLeft === "down" || keys.ControlRight === "down")).subscribe({
+    next: (status: boolean) => ControlPress = status
+})
+
+
+const sbBorder = ref(null);
     const groups: Ref<any[]> = ref([]);
     const { x } = useDraggable(sbBorder, {
         onStart: () => {
@@ -25,13 +33,17 @@ library.add(faGear);
         const widthValue = x.value;
         document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${widthValue+3}px`);
     });
-    let selectedGroups: Ref<Array<string>>;
+    
     const addGroup = () => {
         groups.value.push({name: "Untitled", id: uid()})
     }
+    const selectedGroups: Ref<Array<string>> = ref([]);
     const addCurrentGroup = (id: string) => {
-        selectedGroups.value.push(id);
-        console.log('>>> ', selectedGroups.value);
+        if(ControlPress) {
+            selectedGroups.value.push(id);
+        }else{
+            selectedGroups.value = [id];
+        }
     }
 </script>
 
@@ -40,8 +52,11 @@ library.add(faGear);
         <div class="deviceBox">Devices</div>
         <button @click="addGroup" class="addGroup sidebar-button">Add a group of devices</button>
         <div class="groups">
-            <button v-for="group in groups" :class="{ group: true, selected: selectedGroups.includes(group.id) }" @click="addCurrentGroup(group.id)">
+            <button v-for="group in groups" :class="{ group: true, selected: selectedGroups?.includes(group.id) }" @click="addCurrentGroup(group.id)">
                 <font-awesome-icon icon="fa-solid fa-layer-group"/>&nbsp;{{ group.name }}
+                <button class="addDevice">
+                    <font-awesome-icon icon="fa-solid fa-circle-plus" />
+                </button>
             </button>
         </div>
         <button class="sidebar-button setting-button"><font-awesome-icon icon="fa-solid fa-gear" />&nbsp;Settings</button>
@@ -99,6 +114,9 @@ library.add(faGear);
             .group {
                 border: none;
                 outline: none;
+                display: grid;
+                grid-template-columns: auto auto 1fr;
+                width: 100%;
                 color: #d0d0d0;
                 padding: 0.8rem 0;
                 background-color: transparent;
@@ -107,14 +125,33 @@ library.add(faGear);
                 font-size: 1.1rem;
                 text-align: left;
                 padding-left: 0.8rem;
+                padding-right: 1rem;
                 border-left: 4px solid green;
                 cursor: pointer;
                 &:hover {
                     background-color: #383b41AA;
                 }
+                .addDevice{
+                    display: flex;
+                    justify-self: flex-end;
+                    align-self: center;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    border: none;
+                    font-size: 1.2rem;
+                    color: #F0F0F0;
+                    background-color: transparent;
+                    height: 2rem;
+                    width: 2rem;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: #4b4f56;
+                    }
+                }
             }
             .selected {
-                background-color: red;
+                background-color: #383b41AA;
             }
         }
         .border{
