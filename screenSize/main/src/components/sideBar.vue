@@ -6,19 +6,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faCirclePlus, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { uid } from 'uid';
-import { Command } from '@/scripts/commands';
-import { map } from 'rxjs';
+import { Command } from '@/scripts/command';
 
 library.add(faLayerGroup);
 library.add(faGear);
 library.add(faCirclePlus);
-
-let ControlPress: Boolean = false;
-
-Command.pipe(map(keys => keys.Control === "down" || keys.ControlLeft === "down" || keys.ControlRight === "down")).subscribe({
-    next: (status: boolean) => ControlPress = status
-})
-
 
 const sbBorder = ref(null);
     const groups: Ref<any[]> = ref([]);
@@ -39,8 +31,12 @@ const sbBorder = ref(null);
     }
     const selectedGroups: Ref<Array<string>> = ref([]);
     const addCurrentGroup = (id: string) => {
-        if(ControlPress) {
-            selectedGroups.value.push(id);
+        if(Command().key.some(cmd => cmd === 'ControlLeft' || cmd === 'ControlRight' || cmd === 'Control')) {
+            if(selectedGroups.value.includes(id)) {
+                selectedGroups.value = selectedGroups.value.filter(grp => grp !== id);
+            }else{
+                selectedGroups.value.push(id);
+            }
         }else{
             selectedGroups.value = [id];
         }
