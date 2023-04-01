@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faCirclePlus, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { uid } from 'uid';
-import { Command } from '@/scripts/command';
+import { Command } from '@/scripts/command.store';
 
 library.add(faLayerGroup);
 library.add(faGear);
@@ -14,24 +14,24 @@ library.add(faCirclePlus);
 
 const sbBorder = ref(null);
     const groups: Ref<any[]> = ref([]);
-    const { x } = useDraggable(sbBorder, {
-        onStart: () => {
-            document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '1');
-        },
-        onEnd: () => {
-            document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '0');
-        }});
-    watchEffect(() => {
-        const widthValue = x.value;
-        document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${widthValue+3}px`);
-    });
+    // const { x } = useDraggable(sbBorder, {
+    //     onStart: () => {
+    //         document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '1');
+    //     },
+    //     onEnd: () => {
+    //         document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '0');
+    //     }});
+    // watchEffect(() => {
+    //     const widthValue = x.value;
+    //     document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${widthValue+3}px`);
+    // });
     
     const addGroup = () => {
         groups.value.push({name: "Untitled", id: uid()})
     }
     const selectedGroups: Ref<Array<string>> = ref([]);
     const addCurrentGroup = (id: string) => {
-        if(Command().key.some(cmd => cmd === 'ControlLeft' || cmd === 'ControlRight' || cmd === 'Control')) {
+        if(Command().key.some((cmd: string) => cmd === 'ControlLeft' || cmd === 'ControlRight' || cmd === 'Control')) {
             if(selectedGroups.value.includes(id)) {
                 selectedGroups.value = selectedGroups.value.filter(grp => grp !== id);
             }else{
@@ -57,23 +57,19 @@ const sbBorder = ref(null);
         </div>
         <button class="sidebar-button setting-button"><font-awesome-icon icon="fa-solid fa-gear" />&nbsp;Settings</button>
         <button class="version-button">v1.0.0</button>
-        <div ref="sbBorder" class="border"/>
+        <!-- <div ref="sbBorder" class="border"/> -->
     </div>
 </template>
 
 <style lang="scss">
     .sidebar {
         font-family: 'Open Sans', sans-serif;
-        --border-opacity: 0;
         display: grid;
         grid-template-rows: repeat(2, auto) 1fr repeat(2, auto);
         background-color: #2a2d32;
-        position: absolute;
         top: 0;
         box-shadow: inset -15px 0 16px -10px #131313, 15px 0 16px 10px #F0F0F0;
-        min-width: 16%;
-        max-width: 50%;
-        width: var(--sidebar-width);
+        width: 10rem;
         height: 100%;
         user-select: none;
         .deviceBox {
@@ -150,22 +146,22 @@ const sbBorder = ref(null);
                 background-color: #383b41AA;
             }
         }
-        .border{
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 3px;
-            height: 100%;
-            background-color: rgb(40, 151, 255);
-            opacity: var(--border-opacity);
-            transition: opacity 0.2s ease;
-            cursor: var(--border-cursor);
-            &:hover {
-                opacity: 1;
-                cursor: e-resize;
-                transition: opacity 0.2s ease;
-            }
-        }
+        // .border{
+        //     position: absolute;
+        //     top: 0;
+        //     right: 0;
+        //     width: 3px;
+        //     height: 100%;
+        //     background-color: rgb(40, 151, 255);
+        //     opacity: var(--border-opacity);
+        //     transition: opacity 0.2s ease;
+        //     cursor: var(--border-cursor);
+        //     &:hover {
+        //         opacity: 1;
+        //         cursor: e-resize;
+        //         transition: opacity 0.2s ease;
+        //     }
+        // }
         .setting-button {
             border-left: 2px solid #909090;
             padding-left: 0.9rem;
