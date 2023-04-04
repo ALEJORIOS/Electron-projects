@@ -10,14 +10,12 @@ export const Command = defineStore('Command', {
     },
     actions: {
         changeCommand(newCommand: Array<string>) {
-            console.log('Cambio: ', newCommand);
             this.currentCommand = newCommand;
         }
     }
 })
 
 onKeyStroke(true, (e: KeyboardEvent) => {
-    console.log('Algo presionado');
     // e.preventDefault();
     sendCommand({command: e.code as unknown as AllCommandsInt, status: 'down'})
 }, {eventName: 'keydown'})
@@ -32,7 +30,6 @@ const sendCommand = (command: CommandInt) => {
         if(currentCommands.indexOf(command.command) === -1) {
             currentCommands.push(command.command);
             Command().changeCommand(currentCommands as unknown as Array<string>);
-            console.log('Current: ', currentCommands);
         }
     }else{
         currentCommands = currentCommands.filter(cmd => cmd !== command.command);

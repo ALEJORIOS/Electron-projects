@@ -1,21 +1,18 @@
-import { onKeyStroke, useDraggable } from '@vueuse/core';
 import { defineStore } from 'pinia';
 
 export const Layout = defineStore('Layout', {
-    state: () => ({sidebarWidth: -1, devicesWidth: -1, deviceViewerView: -1}),
+    state: () => ({SidebarWidth: 300, DevicesWidth: -1, DeviceViewerView: -1}),
     getters: {
-        sidebarWidth: (state) => state.sidebarWidth,
-        devicesWidth: (state) => state.devicesWidth,
-        deviceViewerWidth: (state) => state.deviceViewerView
+        sidebarWidth: (state) => state.SidebarWidth,
+        devicesWidth: (state) => state.DevicesWidth,
+        deviceViewerWidth: (state) => state.DeviceViewerView
     },
     actions: {
         changeSidebarWidth(newWidth: number) {
-            console.log('Width: ', newWidth);
-            this.sidebarWidth = newWidth;
+            this.SidebarWidth = newWidth;
+        },
+        changeVirtualDeviceWidth(newWidth: number) {
+            this.DeviceViewerView = newWidth;
         }
-        // changeCommand(newCommand: Array<string>) {
-        //     console.log('Cambio: ', newCommand);
-        //     this.currentCommand = newCommand;
-        // }
     }
 })

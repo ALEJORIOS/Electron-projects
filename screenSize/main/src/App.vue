@@ -4,20 +4,26 @@
   import devices from './components/devices.vue';
   import virtualDevice from './components/virtualDevice.vue';
   import { useDraggable } from '@vueuse/core';
-  import { ref } from 'vue';
-  import { Layout } from './scripts/layout';
+  import { ref, watch } from 'vue';
+  import { Layout } from './scripts/layout.store';
 
   const LayoutStore = Layout();
 
   const barOne = ref<HTMLElement | null>(null);
   const barTwo = ref<HTMLElement | null>(null);
-  const {x} = useDraggable(barOne);
-  // const {x} = useDraggable(barTwo);
+  const barOneWidth = useDraggable(barOne);
+  const barTwoWidth = useDraggable(barTwo);
+  
+  watch(barOneWidth.x, (newValue) => {
+    LayoutStore.changeSidebarWidth(newValue || 100);
+  });
+
+  watch(barTwoWidth.x, (newValue) => {
+    LayoutStore.changeVirtualDeviceWidth((screen.width - newValue) || 100);
+  });
 </script>
 
 <template>
-  <!-- <commandBox/> -->
-  <h1>{{ x }}</h1>
   <div class="layout">
     <sideBar/>
     <div class="border" id="bar-one" ref="barOne"></div>
@@ -29,29 +35,23 @@
 
 <style lang="scss">
   .layout {
-    // display: grid;
     display: flex;
     width: 100vw;
     height: 100vh;
-    // grid-template-columns: 1.8fr auto 8fr auto 2fr;
-    
-    #bar-one {
-      grid-column: 2/3;
-    }
 
     #bar-two {
-      background-color: #cdcee1;
-      grid-column: 4/5;
+      background-color: #2A2D32;
     }
+
     .border {
-      width: 2.5px;
+      width: 4px;
       height: 100vh;
+      background-color: #2A2D32;
       &:hover {
         background-color: #0091ff !important;
-        transition: background 0.05s 0.4s;
+        transition: background 0.05s 0.1s;
         cursor: col-resize;
       }
     }
-
   }
 </style>

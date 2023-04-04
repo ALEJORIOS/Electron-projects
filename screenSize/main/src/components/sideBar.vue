@@ -1,31 +1,25 @@
 <script setup lang='ts'>
-import { useDraggable } from '@vueuse/core'
-import { ref, watchEffect, type Ref } from 'vue';
+import { ref, watch, type Ref } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faCirclePlus, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { uid } from 'uid';
 import { Command } from '@/scripts/command.store';
+import { Layout } from '@/scripts/layout.store';
 
 library.add(faLayerGroup);
 library.add(faGear);
 library.add(faCirclePlus);
 
+const LayoutStore = Layout();
+
+watch(LayoutStore, (newValue) => {
+    document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${newValue.sidebarWidth}px`);
+})
+
 const sbBorder = ref(null);
     const groups: Ref<any[]> = ref([]);
-    // const { x } = useDraggable(sbBorder, {
-    //     onStart: () => {
-    //         document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '1');
-    //     },
-    //     onEnd: () => {
-    //         document.querySelector<HTMLElement>(".border")?.style.setProperty('--border-opacity', '0');
-    //     }});
-    // watchEffect(() => {
-    //     const widthValue = x.value;
-    //     document.querySelector<HTMLElement>(".sidebar")?.style.setProperty('--sidebar-width', `${widthValue+3}px`);
-    // });
-    
     const addGroup = () => {
         groups.value.push({name: "Untitled", id: uid()})
     }
@@ -57,7 +51,6 @@ const sbBorder = ref(null);
         </div>
         <button class="sidebar-button setting-button"><font-awesome-icon icon="fa-solid fa-gear" />&nbsp;Settings</button>
         <button class="version-button">v1.0.0</button>
-        <!-- <div ref="sbBorder" class="border"/> -->
     </div>
 </template>
 
@@ -65,11 +58,14 @@ const sbBorder = ref(null);
     .sidebar {
         font-family: 'Open Sans', sans-serif;
         display: grid;
+        flex-shrink: 0;
         grid-template-rows: repeat(2, auto) 1fr repeat(2, auto);
         background-color: #2a2d32;
         top: 0;
-        box-shadow: inset -15px 0 16px -10px #131313, 15px 0 16px 10px #F0F0F0;
-        width: 10rem;
+        box-shadow: inset -15px 0 16px -10px #24272c, 15px 0 16px 10px #F0F0F0;
+        width: var(--sidebar-width);
+        min-width: 210px;
+        max-width: 590px;
         height: 100%;
         user-select: none;
         .deviceBox {
@@ -91,7 +87,7 @@ const sbBorder = ref(null);
             height: 50px;
             font-family: 'Open Sans', sans-serif;
             font-weight: 400;
-            font-size: 1.2rem;
+            font-size: 1rem;
             padding-left: 0.4rem;
             cursor: pointer;
             &:hover {
@@ -110,18 +106,19 @@ const sbBorder = ref(null);
                 grid-template-columns: auto auto 1fr;
                 width: 100%;
                 color: #d0d0d0;
-                padding: 0.8rem 0;
+                padding: 0.6rem 0;
                 background-color: transparent;
                 font-family: 'Open Sans', sans-serif;
                 font-weight: 300;
-                font-size: 1.1rem;
+                font-size: 0.9rem;
                 text-align: left;
                 padding-left: 0.8rem;
                 padding-right: 1rem;
                 border-left: 4px solid green;
+                align-items: center;
                 cursor: pointer;
                 &:hover {
-                    background-color: #383b41AA;
+                    background-color: #383b4160;
                 }
                 .addDevice{
                     display: flex;
@@ -131,19 +128,20 @@ const sbBorder = ref(null);
                     align-items: center;
                     border-radius: 50%;
                     border: none;
-                    font-size: 1.2rem;
-                    color: #F0F0F0;
+                    font-size: 0.9rem;
+                    color: #B0B0B0;
                     background-color: transparent;
                     height: 2rem;
                     width: 2rem;
                     cursor: pointer;
                     &:hover {
                         background-color: #4b4f56;
+                        color: #f0f0f0;
                     }
                 }
             }
             .selected {
-                background-color: #383b41AA;
+                background-color: #383b41;
             }
         }
         // .border{
