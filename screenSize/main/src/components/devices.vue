@@ -1,5 +1,6 @@
 <script setup lang='ts'>
 import { Main } from '@/scripts/main.store';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 let urlDirection: string;
 const MainStore = Main();
@@ -14,6 +15,15 @@ const search = (event: KeyboardEvent) => {
         <div class="url-direction">
             <input type="text" v-on:keyup.enter="search($event)">
         </div>
+        <span class="title">Devices</span>
+        <button class="add-device"><font-awesome-icon icon="fa-solid fa-circle-plus"/> Add Device</button>
+        <table class="device-table">
+            <thead>
+                <th>Name</th>
+                <th>Creation date</th>
+                <th>Resolution</th>
+            </thead>
+        </table>
     </div>
 </template>
 
@@ -42,6 +52,52 @@ const search = (event: KeyboardEvent) => {
                 font-size: 1rem;
                 &:focus {
                     border: 1px solid #3178C6;
+                }
+            }
+        }
+        .title {
+            font-family: 'Golos Text', sans-serif;
+            color: #F0F0F0;
+            font-size: 1.6rem;
+            padding-left: 0.4em;
+            position: relative;
+            top: 1rem;
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+        .add-device {
+            position: relative;
+            top: 1.4em;
+            left: 0.4em;
+            border: none;
+            height: 30px;
+            font-size: 1.2rem;
+            border-radius: 15px;
+            cursor: pointer;
+            background-color: #3577e0;
+            color: white;
+            font-family: "Open sans", sans-serif;
+            font-size: 1rem;
+            padding: 0 0.6em;
+            transition: background-color 0.1s ease, box-shadow 0.2s ease;
+            &:active {
+                background-color: #568dcc;
+            }
+            &:hover {
+                box-shadow: 0 0 8px 2px #2e54c680;
+            }
+        }
+        .device-table {
+            position: relative;
+            width: 100%;
+            top: 4em;
+            left: 1em;
+            thead {
+                th {
+                    color: #B0B0B0;
+                    font-family: "Open sans", sans-serif;
+                    font-weight: 400;
                 }
             }
         }

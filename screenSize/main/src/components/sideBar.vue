@@ -2,8 +2,7 @@
 import { ref, watch, type Ref } from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faCirclePlus, faLayerGroup } from '@fortawesome/free-solid-svg-icons';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { faCirclePlus, faLayerGroup, faGear } from '@fortawesome/free-solid-svg-icons';
 import { uid } from 'uid';
 import { Command } from '@/scripts/command.store';
 import { Layout } from '@/scripts/layout.store';
@@ -39,7 +38,7 @@ const sbBorder = ref(null);
 
 <template>
     <div class="sidebar">
-        <div class="deviceBox">Devices</div>
+        <div class="deviceBox">Screen Size</div>
         <button @click="addGroup" class="addGroup sidebar-button">Add a group of devices</button>
         <div class="groups">
             <button v-for="group in groups" :class="{ group: true, selected: selectedGroups?.includes(group.id) }" @click="addCurrentGroup(group.id)">
